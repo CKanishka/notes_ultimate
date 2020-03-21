@@ -33,3 +33,14 @@ code {
     box-shadow: 0 20px 30px 0 rgba(2, 25, 46, 0.02), 0 2px 10px 0 rgba(2, 19, 29, 0.12);
 }
 
+
+.listLineThrough{
+    text-decoration: line-through;
+}
+li{
+    color:#1b93e9;
+}
+ul{
+    list-style-type: none;
+    margin:1rem
+}

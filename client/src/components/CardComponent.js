@@ -1,6 +1,9 @@
 import React from 'react';
 import {Card} from 'react-bootstrap';
 import MapContainer from './MapContainer';
+const toggleCompletion = (props,id) => {
+    props.toggleCompletion(id)
+}
 const CardComponent = (props) => {
     const {title,description,link,file,listItems,location} = props.item
     console.log(listItems)
@@ -15,7 +18,7 @@ const CardComponent = (props) => {
                 </Card.Text>
                 <a href={link}> {link} </a>
                 <ul>
-                {listItems.map((item)=><li>{item.text}</li>)}
+                {listItems.map((item)=><li key={item.id} onClick={()=>toggleCompletion(props,item.id)} className={item.checked?"listLineThrough":""}>{item.text}</li>)}
                 </ul>
                 {(location.lat!==22.0127399 || location.lng!==79.4523598) && <MapContainer location={location} dragMarkerDisable={true}/> }
             </Card.Body>

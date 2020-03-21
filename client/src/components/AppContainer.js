@@ -24,8 +24,18 @@ class AppContainer extends Component{
     triggerModal = (option) => {
         this.setState({showModal:!this.state.showModal,option:option})
     }
-    componentDidMount(){
-        console.log("mounterd")
+    toggleCompletion = (id) => {
+        const updatedCards = this.state.cardItems.map((item) => {
+        
+        const updatedListItems = item.listItems.map((li)=>{
+           if(li.id === id){
+               return {...li,checked:true}
+           } 
+           return li
+        })
+        return {...item,listItems:updatedListItems}
+        })
+        this.setState({cardItems:updatedCards})
     }
     render(){
         
@@ -37,7 +47,7 @@ class AppContainer extends Component{
             <Container>
                 <Row > 
                     <CardColumns>
-                        {this.state.cardItems.map((item)=><Card item={item}/>)}
+                        {this.state.cardItems.map((item)=><Card item={item} toggleCompletion={this.toggleCompletion}/>)}
                     </CardColumns>
                 </Row>
             </Container>    

@@ -1,6 +1,8 @@
 import React,{Component} from 'react';    
 import { Modal,Button ,Form,Col,Row,InputGroup,FormControl} from 'react-bootstrap';   
 import MapContainer from './MapContainer';
+import uuid from "uuid/v4";
+
 const defaultState = {
     listItems:[],
     currentItem:{itemText:"",checked:false},
@@ -28,7 +30,7 @@ class ModalInput extends Component{
         e.preventDefault();
         const {currentItem,listItems} = this.state
         if(currentItem.itemText.length>0){
-        this.setState({listItems:[{text:currentItem.itemText,checked:currentItem.checked},...listItems],currentItem:{itemText:"",checked:false}})
+        this.setState({listItems:[{text:currentItem.itemText,checked:currentItem.checked,id: uuid()},...listItems],currentItem:{itemText:"",checked:false}})
         }
     }
     handleCardSubmit = (e) => {
@@ -75,35 +77,34 @@ class ModalInput extends Component{
 
     listInput = () => {
         const listInputBox = 
-        <form onSubmit={this.handleSubmit}>
+        // <form onSubmit={this.handleSubmit}>
         <InputGroup className="mb-3">
         <InputGroup.Prepend>
-        <InputGroup.Checkbox aria-label="Checkbox for following text input" checked={this.state.currentItem.checked} onClick={this.toggleCheckBox} />
+        <InputGroup.Checkbox aria-label="Checkbox for following text input" checked={this.state.currentItem.checked} onChange={this.toggleCheckBox} />
         </InputGroup.Prepend>
             <FormControl aria-label="Text input with checkbox" value={this.state.currentItem.itemText} onChange={this.handleChange}/>
-            <Button variant="warning" type="submit">+</Button>
+            <Button variant="warning" type="submit" onClick={this.handleSubmit}>+</Button>
         </InputGroup>  
         
-        </form>
+        // </form>
         return listInputBox
     }
 
-    renderListItems = (item) => {
+    renderListItems = (item,index) => {
         const renderListItem = 
-        <form onSubmit={this.handleSubmit}>
-            <InputGroup className="mb-3">
+            <InputGroup className="mb-3" key={index}>
             <InputGroup.Prepend>
-            <InputGroup.Checkbox aria-label="Checkbox for following text input" checked={item.checked}/>
+            <InputGroup.Checkbox aria-label="Checkbox for following text input" checked={item.checked} onChange={()=>console.log("checkbox clicked")}/>
             </InputGroup.Prepend>
                 <FormControl aria-label="Text input with checkbox" value={item.text}/>
             </InputGroup>  
-        </form>
+     
         return renderListItem
     }
     renderListContainer = () => {
         return(
             <>
-        {this.state.listItems.map((item)=>this.renderListItems(item))}
+        {this.state.listItems.map((item,index)=>this.renderListItems(item,index))}
         {this.listInput()}
         </>
         )
