@@ -2,8 +2,8 @@ const express=require('express');
 const router=express.Router();
 
 //Importing the user model
-const User=require('../models/User');
-
+const User = require('../models/User');
+const Item = require('../models/Item');
 
 /********* USER AUTHENTICATION and REGISTRATION *****************/
 router.post('/register', function(req, res) {
@@ -52,6 +52,26 @@ User.findOne({ email }, function(err, user) {
     }
 });
 });
+/***********************ADD NEW ITEM*************************/
 
+router.post('/additem',(req,res)=>{
+    const newItem = new Item({
+        title:req.body.title,               
+        description:req.body.description,     
+        link:req.body.link,
+        file:req.body.file,
+        listItems:req.body.listItems,
+        location:req.body.location,
+        userid:req.body.userid
+    });
+    newItem.save().then((item)=>res.json(item));
+})
 
+/************************GET ITEMS BY EACH USER  **************/
+
+router.get('/getitems/:userid',(req,res)=>{
+    Item.find({userid:req.params.userid})    
+        .then((items)=>res.json(items)) 
+        .catch(()=>res.status(404).json({sucess:false}));   
+})
 module.exports=router;

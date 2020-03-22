@@ -14,9 +14,24 @@ class AppContainer extends Component{
         option:'',
         searchQuery:''
     }
-
+    componentDidMount(){
+        fetch(`http://localhost:5000/getitems/${this.props.currentUser}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json"},
+        })
+        .then((res)=>res.json())
+        .then((res)=>this.setState({cardItems:res}))
+    }
     addCardItems = (item) => {
-        this.setState({cardItems:[item,...this.state.cardItems]})
+        this.setState({cardItems:[item,...this.state.cardItems]},()=>console.log(this.state.cardItems))
+        //saving the new item to DB
+        fetch('http://localhost:5000/additem', {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({...item,userid:this.props.currentUser})
+        })
+        .then((res)=>res.json())
+        .then((res)=>console.log(res))
     }
     handleSearch = (searchQuery) => {
         console.log(searchQuery)

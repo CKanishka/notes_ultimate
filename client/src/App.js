@@ -75,7 +75,7 @@ class App extends React.Component {
 
         return (
             <div className="App">
-                {this.state.route === "home"? <AppContainer /> : this.state.route==="signin"?<LoginForm handleSignIn={this.handleSignIn} routeToRegister={this.routeToRegister}/> : <RegisterForm handleRegister={this.handleRegister}/>}
+                {this.state.route === "home"? <AppContainer currentUser={this.state.currentUser}/> : this.state.route==="signin"?<LoginForm handleSignIn={this.handleSignIn} routeToRegister={this.routeToRegister}/> : <RegisterForm handleRegister={this.handleRegister}/>}
             </div>
           );
     }

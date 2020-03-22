@@ -10,10 +10,11 @@ const defaultState = {
     title:'',
     description:'',
     link:'',
-    location:{
+    defaultLocation:{
         lat: 22.0127399,
         lng: 79.4523598
-    }
+    },
+    location:null
 }
 class ModalInput extends Component{
     state = defaultState
@@ -23,6 +24,7 @@ class ModalInput extends Component{
             file: URL.createObjectURL(e.target.files[0])
           })
     }
+    /********Handlers for the list ********/
     handleChange = (e) => {
         this.setState({currentItem:{...this.state.currentItem,itemText:e.target.value}})
     }
@@ -33,6 +35,7 @@ class ModalInput extends Component{
         this.setState({listItems:[{text:currentItem.itemText,checked:currentItem.checked,id: uuid()},...listItems],currentItem:{itemText:"",checked:false}})
         }
     }
+    /*************************************/
     handleCardSubmit = (e) => {
         e.preventDefault()
         const {title,description,link,file,listItems,location} = this.state
@@ -121,7 +124,7 @@ class ModalInput extends Component{
     renderMapInput = () => {
         return (
             
-            <MapContainer onMarkerDragEnd={this.markerDragEnd} location={this.state.location} draggable={true} />
+            <MapContainer onMarkerDragEnd={this.markerDragEnd} location={this.state.defaultLocation} draggable={true} />
             
         )
     }
