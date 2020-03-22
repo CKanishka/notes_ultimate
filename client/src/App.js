@@ -6,24 +6,41 @@ import RegisterForm from './components/Register';
 class App extends React.Component {
     state={
         route:"signin",
-        users:[{email:"test@mail.com",password:"test123"}]
+        users:[{email:"test@mail.com",password:"test123"}],
+        currentUser:''
     }
     handleSignIn = (email,password) => {
-        console.log("handleSignInProp")
-        const exists = this.state.users.map((user) => {
-            if(user.email === email && user.password === password){
-                return true
-            }
-            return false
+        // const exists = this.state.users.map((user) => {
+        //     if(user.email === email && user.password === password){
+        //         return true
+        //     }
+        //     return false
+        // })
+
+        // if(exists.some((item)=> item === true)){
+        //     this.setState({route:"home"})
+        // }
+
+        // else{
+        //     alert("Please check your credentials or register")
+        // }
+
+        fetch(' http://localhost:5000/authenticate', {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({email,password})
         })
-
-        if(exists.some((item)=> item === true)){
-            this.setState({route:"home"})
-        }
-
-        else{
+        .then((response)=>response.json())
+        .then((res)=>{
+            console.log(res)
+            if(!res.error)
+            this.setState({route:"home",currentUser:res.user})
+            else
             alert("Please check your credentials or register")
-        }
+        })
+        .catch((err)=>{
+            alert("Error logging in")
+        })
     }
 
     routeToRegister = () => {
@@ -33,8 +50,25 @@ class App extends React.Component {
         this.setState({route:"signin"})
     }
     handleRegister = (email,password) => {
-        this.setState({users:[...this.state.users,{email,password}]},this.routeToLogin)
-        alert("Registered Successfully. You can signin now.")
+        // this.setState({users:[...this.state.users,{email,password}]},this.routeToLogin)
+        // alert("Registered Successfully. You can signin now.")
+        fetch(' http://localhost:5000/register', {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({email,password})
+        })
+        .then((res)=>{
+            console.log(res)
+            if(res.status===200){
+                alert("Registered Successfully. You can signin now.")
+                this.setState({route:"signin"})
+            }
+            else
+            alert("Error registering please try again with different email-id")
+        })
+        .catch((err)=>{
+            alert("Error logging in")
+        })
     }
     
     render(){

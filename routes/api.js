@@ -46,7 +46,7 @@ User.findOne({ email }, function(err, user) {
             error: 'Incorrect email or password2'
         });
         } else {
-        res.status(200).send("Welcome to the all in one Notes app");
+        res.status(200).json({user:user._id});
         }
     });
     }
