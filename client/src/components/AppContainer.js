@@ -3,8 +3,8 @@ import TopNavBar from './TopNavBar';
 import ButtonContainer from './ButtonContainer';
 import ModalInput from './ModalInput';
 import Card from './CardComponent';
-import {CardDeck,Container,Row,CardColumns} from 'react-bootstrap';
-import MapContainer from './MapContainer';
+import {Container,Row,CardColumns} from 'react-bootstrap';
+
 class AppContainer extends Component{
 
     state={
@@ -29,7 +29,7 @@ class AppContainer extends Component{
         
         const updatedListItems = item.listItems.map((li)=>{
            if(li.id === id){
-               return {...li,checked:true}
+               return {...li,checked:!li.checked}
            } 
            return li
         })
