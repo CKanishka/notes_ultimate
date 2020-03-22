@@ -34,6 +34,7 @@ class App extends React.Component {
     }
     handleRegister = (email,password) => {
         this.setState({users:[...this.state.users,{email,password}]},this.routeToLogin)
+        alert("Registered Successfully. You can signin now.")
     }
     
     render(){

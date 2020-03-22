@@ -6,7 +6,8 @@ class RegisterForm extends Component {
     state={
         name:"",
         email:"",
-        password:""
+        password:"",
+        password2:""
     }
 
     handleInputChange = (e) => {
@@ -15,7 +16,13 @@ class RegisterForm extends Component {
 
     handleRegister = (e) => {
         e.preventDefault()
-        this.props.handleRegister(this.state.email,this.state.password)
+        if(this.state.password===this.state.password2){
+            this.props.handleRegister(this.state.email,this.state.password)
+        }
+        else{
+            alert("Passwords do not match")
+        }
+       
     }
     render(){
 
@@ -37,6 +44,10 @@ class RegisterForm extends Component {
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control name="password" type="password" placeholder="Password" onChange={this.handleInputChange}/>
+                    </Form.Group>
+                    <Form.Group controlId="formBasicPassword">
+                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Control name="password2" type="password" placeholder="Confirm Password" onChange={this.handleInputChange}/>
                     </Form.Group>
                     <Button variant="primary" type="submit" onClick={this.handleRegister}>
                         Register

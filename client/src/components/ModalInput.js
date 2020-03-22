@@ -121,7 +121,7 @@ class ModalInput extends Component{
     renderMapInput = () => {
         return (
             
-            <MapContainer onMarkerDragEnd={this.markerDragEnd} location={this.state.location} />
+            <MapContainer onMarkerDragEnd={this.markerDragEnd} location={this.state.location} draggable={true} />
             
         )
     }

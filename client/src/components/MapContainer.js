@@ -13,7 +13,7 @@ class MapContainer extends React.Component {
     render() {
      const lat = 22.0127399;
      const lng = 71.4523598;
-     const {location} = this.props
+     const {location,draggable} = this.props
       return (
         <div style={{position:"relative",overflow:"hidden",height:"200px"}}>
         <div id="mapcontainer" >
@@ -25,11 +25,11 @@ class MapContainer extends React.Component {
                 width: "100%",
                 height: "100%",
                 }}
-                zoom={5}
+                zoom={3}
             >
             <Marker
               position={location}
-              draggable={true}
+              draggable={draggable}
               onDragend={(t, map, coord) => this.onMarkerDragEnd(coord)}
               name={"Marker 1"}
             />
