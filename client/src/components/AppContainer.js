@@ -10,13 +10,21 @@ class AppContainer extends Component{
     state={
         showModal:false,
         cardItems:[],
-        option:''
+        filteredItems:[],
+        option:'',
+        searchQuery:''
     }
 
     addCardItems = (item) => {
         this.setState({cardItems:[item,...this.state.cardItems]})
     }
-
+    handleSearch = (searchQuery) => {
+        console.log(searchQuery)
+        const filteredItems = this.state.cardItems.filter((item)=>{
+            return item.title.toLowerCase().search(searchQuery.toLowerCase()) !== -1;
+        });
+        this.setState({filteredItems,searchQuery})
+    }
     handleClose = () => {
         this.setState({showModal:false})
     }
@@ -38,16 +46,18 @@ class AppContainer extends Component{
         this.setState({cardItems:updatedCards})
     }
     render(){
-        
         return(
             <>
             <ModalInput show={this.state.showModal} handleClose={this.handleClose} option={this.state.option} addCardItems={this.addCardItems}/>
-            <TopNavBar />
+            <TopNavBar handleSearch={this.handleSearch}/>
             <ButtonContainer triggerModal={this.triggerModal}/>
             <Container>
                 <Row > 
                     <CardColumns>
-                        {this.state.cardItems.map((item)=><Card item={item} toggleCompletion={this.toggleCompletion}/>)}
+                        {
+                        (this.state.searchQuery.length>0)?(this.state.filteredItems.map((item)=><Card item={item} toggleCompletion={this.toggleCompletion}/>))
+                        :(this.state.cardItems.map((item)=><Card item={item} toggleCompletion={this.toggleCompletion}/>))
+                        }
                     </CardColumns>
                 </Row>
             </Container>    

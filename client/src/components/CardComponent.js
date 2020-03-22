@@ -6,7 +6,6 @@ const toggleCompletion = (props,id) => {
 }
 const CardComponent = (props) => {
     const {title,description,link,file,listItems,location} = props.item
-    console.log(listItems)
     return (
         <Card className="cardcomp" style={{ width: '18rem' }}>
             <Card.Img className="cardimg" variant="top" src={file} />
