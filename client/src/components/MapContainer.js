@@ -15,13 +15,14 @@ class MapContainer extends React.Component {
      const lng = 71.4523598;
      const {location} = this.props
       return (
-        <div style={{width:"80%"}}>
+        <div style={{position:"relative",overflow:"hidden",height:"200px"}}>
+        <div id="mapcontainer" >
         <GoogleMap 
                 google={this.props.google}
                 initialCenter = {{lat,lng} }
                 center = {{lat,lng}}
                 style={{
-                width: "80%",
+                width: "100%",
                 height: "100%",
                 }}
                 zoom={5}
@@ -33,6 +34,7 @@ class MapContainer extends React.Component {
               name={"Marker 1"}
             />
         </GoogleMap>
+        </div>
         </div>
       );
     }

@@ -17,7 +17,7 @@ const CardComponent = (props) => {
                 </Card.Text>
                 <a href={link}> {link} </a>
                 <ul>
-                {listItems.map((item)=><li key={item.id} onClick={()=>toggleCompletion(props,item.id)} className={item.checked?"listLineThrough":""}><input type="checkbox"/><span className="pl-3">{item.text}</span></li>)}
+                {listItems.map((item)=><li key={item.id} onClick={()=>toggleCompletion(props,item.id)} className={item.checked?"listLineThrough":""}><input type="checkbox" checked={item.checked}/><span className="pl-3">{item.text}</span></li>)}
                 </ul>
                 {(location.lat!==22.0127399 || location.lng!==79.4523598) && <MapContainer location={location} dragMarkerDisable={true}/> }
             </Card.Body>
