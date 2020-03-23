@@ -23,7 +23,7 @@ class AppContainer extends Component{
         .then((res)=>this.setState({cardItems:res}))
     }
     addCardItems = (item) => {
-        this.setState({cardItems:[item,...this.state.cardItems]},()=>console.log(this.state.cardItems))
+        // this.setState({cardItems:[item,...this.state.cardItems]},()=>console.log(this.state.cardItems))
         //saving the new item to DB
         fetch('http://localhost:5000/additem', {
             method: "POST",
@@ -31,7 +31,20 @@ class AppContainer extends Component{
             body: JSON.stringify({...item,userid:this.props.currentUser})
         })
         .then((res)=>res.json())
-        .then((res)=>console.log(res))
+        .then((item)=>this.setState({cardItems:[item,...this.state.cardItems]},()=>console.log(this.state.cardItems)))
+    }
+    addCardWithImage = (item) => {
+        const formData = new FormData()
+        formData.append('cardImg', item.fileObj)
+        formData.append('title',item.title)
+        formData.append('userid',this.props.currentUser)
+        formData.append('location',null)
+        fetch('http://localhost:5000/uploadimage', {
+            method: "POST",
+            body: formData
+        })
+        .then((res)=>res.json())
+        .then((item)=>this.setState({cardItems:[item,...this.state.cardItems]}))
     }
     handleSearch = (searchQuery) => {
         console.log(searchQuery)
@@ -60,18 +73,34 @@ class AppContainer extends Component{
         })
         this.setState({cardItems:updatedCards})
     }
+    deleteItem = (id) => {
+        const updatedCards = this.state.cardItems.filter((item)=> item._id!==id )
+        this.setState({cardItems:updatedCards})
+    }
+    handleDelete = (id) => {
+        fetch(`http://localhost:5000/delete/${id}`, {
+            method: "DELETE",
+        })
+        .then((res)=>res.json())
+        .then((res)=>{
+            if(res.success){
+                this.deleteItem(id)
+            }
+            console.log(res);
+        })
+    }
     render(){
         return(
             <>
-            <ModalInput show={this.state.showModal} handleClose={this.handleClose} option={this.state.option} addCardItems={this.addCardItems}/>
+            <ModalInput show={this.state.showModal} handleClose={this.handleClose} option={this.state.option} addCardItems={this.addCardItems} addCardWithImage={this.addCardWithImage}/>
             <TopNavBar handleSearch={this.handleSearch}/>
             <ButtonContainer triggerModal={this.triggerModal}/>
             <Container>
                 <Row > 
                     <CardColumns>
                         {
-                        (this.state.searchQuery.length>0)?(this.state.filteredItems.map((item)=><Card item={item} toggleCompletion={this.toggleCompletion}/>))
-                        :(this.state.cardItems.map((item)=><Card item={item} toggleCompletion={this.toggleCompletion}/>))
+                        (this.state.searchQuery.length>0)?(this.state.filteredItems.map((item)=><Card key={item._id} item={item} toggleCompletion={this.toggleCompletion} handleDelete={()=>this.handleDelete(item._id)}/>))
+                        :(this.state.cardItems.map((item)=><Card key={item._id} item={item} toggleCompletion={this.toggleCompletion} handleDelete={()=>this.handleDelete(item._id)}/>))
                         }
                     </CardColumns>
                 </Row>

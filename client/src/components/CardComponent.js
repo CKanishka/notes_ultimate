@@ -1,6 +1,8 @@
 import React from 'react';
-import {Card} from 'react-bootstrap';
+import {Card,Button} from 'react-bootstrap';
 import MapContainer from './MapContainer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faTrash} from '@fortawesome/free-solid-svg-icons';
 const toggleCompletion = (props,id) => {
     props.toggleCompletion(id)
 }
@@ -17,9 +19,11 @@ const CardComponent = (props) => {
                 </Card.Text>
                 <a href={link}> {link} </a>
                 <ul>
-                {listItems.map((item)=><li key={item.id} onClick={()=>toggleCompletion(props,item.id)} className={item.checked?"listLineThrough":""}><input type="checkbox" checked={item.checked}/><span className="pl-3">{item.text}</span></li>)}
+                {listItems.map((item)=><li key={item.id} onClick={()=>toggleCompletion(props,item.id)} className={item.checked?"listLineThrough":""}><input type="checkbox" defaultValue={item.checked}/><span className="pl-3">{item.text}</span></li>)}
                 </ul>
                 {(location!==null) && <MapContainer location={location} dragMarkerDisable={true}/> }
+                <hr />
+                <Button variant="outline-primary" onClick={props.handleDelete} className="m-2"><FontAwesomeIcon icon={faTrash} /></Button>
             </Card.Body>
         </Card>
     )

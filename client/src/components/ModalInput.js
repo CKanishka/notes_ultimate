@@ -7,6 +7,7 @@ const defaultState = {
     listItems:[],
     currentItem:{itemText:"",checked:false},
     file:null,
+    fileObj:null,
     title:'',
     description:'',
     link:'',
@@ -21,7 +22,8 @@ class ModalInput extends Component{
     
     addImage = (e) => {
         this.setState({
-            file: URL.createObjectURL(e.target.files[0])
+            file: URL.createObjectURL(e.target.files[0]),
+            fileObj:e.target.files[0]
           })
     }
     /********Handlers for the list ********/
@@ -38,9 +40,17 @@ class ModalInput extends Component{
     /*************************************/
     handleCardSubmit = (e) => {
         e.preventDefault()
-        const {title,description,link,file,listItems,location} = this.state
-        this.props.addCardItems({title,description,link,file,listItems,location})
-        this.setState(()=>defaultState)
+        const {title,description,link,file,listItems,location,fileObj} = this.state
+        
+        if(fileObj!=null){
+            this.props.addCardWithImage({title,fileObj})
+            this.setState(()=>defaultState)
+        }
+        else{
+            this.props.addCardItems({title,description,link,file,listItems,location})
+            this.setState(()=>defaultState)
+        }
+        
     }
     toggleCheckBox = (e) => {
         this.setState({currentItem:{...this.state.currentItem,checked:!this.state.currentItem.checked}})

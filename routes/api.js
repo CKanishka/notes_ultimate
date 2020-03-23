@@ -1,6 +1,6 @@
 const express=require('express');
 const router=express.Router();
-
+const multer = require('multer');
 //Importing the user model
 const User = require('../models/User');
 const Item = require('../models/Item');
@@ -20,37 +20,37 @@ router.post('/register', function(req, res) {
   });
 
 router.post('/authenticate', function(req, res) {
-const { email, password } = req.body;
-User.findOne({ email }, function(err, user) {
-    if (err) {
-    console.error(err);
-    res.status(500)
-        .json({
-        error: 'Internal error please try again'
-    });
-    } else if (!user) {
-    res.status(401)
-        .json({
-        error: 'Incorrect email or password1'
-        });
-    } else {
-    user.isCorrectPassword(password, function(err, same) {
+    const { email, password } = req.body;
+    User.findOne({ email }, function(err, user) {
         if (err) {
+        console.error(err);
         res.status(500)
             .json({
             error: 'Internal error please try again'
         });
-        } else if (!same) {
+        } else if (!user) {
         res.status(401)
             .json({
-            error: 'Incorrect email or password2'
-        });
+            error: 'Incorrect email or password1'
+            });
         } else {
-        res.status(200).json({user:user._id});
+        user.isCorrectPassword(password, function(err, same) {
+            if (err) {
+            res.status(500)
+                .json({
+                error: 'Internal error please try again'
+            });
+            } else if (!same) {
+            res.status(401)
+                .json({
+                error: 'Incorrect email or password2'
+            });
+            } else {
+            res.status(200).json({user:user._id});
+            }
+        });
         }
     });
-    }
-});
 });
 /***********************ADD NEW ITEM*************************/
 
@@ -73,5 +73,57 @@ router.get('/getitems/:userid',(req,res)=>{
     Item.find({userid:req.params.userid})    
         .then((items)=>res.json(items)) 
         .catch(()=>res.status(404).json({sucess:false}));   
+})
+
+/***********DELETE ITEM ***************/
+router.delete('/delete/:id',(req,res)=>{
+    Item.findById(req.params.id)   
+        .then((item)=>item.remove().then(()=>res.status(200).json({success:true}))) 
+        .catch(()=>res.status(404).json({sucess:false}));   
+})
+
+/***********Upload Image ************/
+const DIR = './public/images/';
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, DIR);
+    },
+    filename: (req, file, cb) => {
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null,'-' + fileName)
+    }
+});
+
+var upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        }
+    }
+});
+
+router.post('/uploadimage', upload.single('cardImg'), (req, res, next) => {
+    const url = req.protocol + '://' + req.get('host')
+    const item = new Item({
+        title:req.body.title,               
+        description:req.body.description,     
+        link:req.body.link,
+        listItems:req.body.listItems,
+        location:null,
+        userid:req.body.userid,
+        file: url + '/images/' + req.file.filename
+    });
+    item.save().then((item)=>res.json(item))
+    .catch(err => {
+        console.log(err),
+            res.status(500).json({
+                error: err
+            });
+    })
 })
 module.exports=router;
