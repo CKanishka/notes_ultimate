@@ -44,14 +44,15 @@ Clone the repository on your local machine and make sure you have **node** and *
 
 ## Site Flow
 
-  ```mermaid
-graph LR
-A[SignIn Page] -- Successful SignIn --> B(Home Page)
-A -- Failed SignIn --> A
-A -- Register Button Clicked --> C(Register Page)
-B --> D{Add, Delete and Search notes}
-C --Successful Registration --> A
 ```
+    A[SignIn Page] -- Successful SignIn --> B(Home Page)
+    A -- Failed SignIn --> A
+    A -- Register Button Clicked --> C(Register Page)
+    B --> D{Add, Delete and Search notes}
+    C --Successful Registration --> A
+
+```
+
 
 1. The first page is the **SignIn** Page where you can login with your *name* and *email-id* if you are already registered
 
@@ -60,6 +61,7 @@ C --Successful Registration --> A
 3. After successful registration you will be redirected to the **SignIn** page again
 
 4. After successfully signing in, the **Home Page** will be visible where you can start adding notes
+
 ---
 
 **Features**
