@@ -1,45 +1,84 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+## Following are the steps to start the project in Development Mode
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+  
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+Clone the repository on your local machine and make sure you have **node** and **npm** installed. If not you can follow the instructions [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
----
+  
 
-## Edit a file
+### Starting the backend server
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+1. Open a terminal window and switch to the cloned repository **cd > notesapp**
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+2. Execute **npm install**
 
----
+3. The dependencies required for the backend will get installed by this command
 
-## Create a file
+4. Now you are ready to start the server
 
-Next, you’ll add a new file to this repository.
+5. Execute **npm start**
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
-
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+6. The server should be up and running at localhost:5000
 
 ---
 
-## Clone a repository
+  
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+## Starting the frontend client
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+  
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+1. Open a new terminal window and switch to the client folder **cd > notesapp > client**
+
+2. Execute **npm install** to install the dependecies as we did earlier
+
+3. Just one more step and you will be ready to start and play with the frontend
+
+4. Execute **npm start**
+
+5. Your browser window will launch automatically and the site should be hosted at localhost:3000 or any other port if it is busy.
+
+---
+
+  
+
+## Site Flow
+
+  ```mermaid
+graph LR
+A[SignIn Page] -- Successful SignIn --> B(Home Page)
+A -- Failed SignIn --> A
+A -- Register Button Clicked --> C(Register Page)
+B --> D{Add, Delete and Search notes}
+C --Successful Registration --> A
+```
+
+1. The first page is the **SignIn** Page where you can login with your *name* and *email-id* if you are already registered
+
+2. Otherwise you can click on the **Register** button and register with your name and email-id
+
+3. After successful registration you will be redirected to the **SignIn** page again
+
+4. After successfully signing in, the **Home Page** will be visible where you can start adding notes
+---
+
+**Features**
+
+  
+
+1. Add a simple note with title and description
+
+2. Add a list of items
+
+3. Add an image
+
+4. Add a Google Map location by moving the marker
+
+5. Add a link
+
+6.  **Search Bar** on the right side of navbar lets you type and filter your notes
+
+7.  **Delete** notes by clicking on the trash icon present in each card
+
+
+
