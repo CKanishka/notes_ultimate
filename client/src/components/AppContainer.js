@@ -86,7 +86,7 @@ class AppContainer extends Component{
             if(res.success){
                 this.deleteItem(id)
             }
-            console.log(res);
+            
         })
     }
     render(){
