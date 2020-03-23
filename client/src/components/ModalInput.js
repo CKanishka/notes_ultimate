@@ -45,10 +45,12 @@ class ModalInput extends Component{
         if(fileObj!=null){
             this.props.addCardWithImage({title,fileObj})
             this.setState(()=>defaultState)
+            this.props.handleClose()
         }
         else{
             this.props.addCardItems({title,description,link,file,listItems,location})
             this.setState(()=>defaultState)
+            this.props.handleClose()
         }
         
     }
@@ -69,18 +71,18 @@ class ModalInput extends Component{
         const detailsInputBox = 
                     this.props.option==="link"? 
                     <Form.Group as={Row} controlId="link">
-                    <Form.Label column sm="2">
-                    Link
-                    </Form.Label>
-                    <Col sm="10">
-                    <Form.Control name="link" type="text" placeholder="Enter a URL" onChange={this.handleInputChange}/>
-                    </Col>
-                </Form.Group>:<Form.Group as={Row} controlId="details">
+                        <Form.Label column sm="2">
+                        Link
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Control name="link" type="text" placeholder="Enter a URL" onChange={this.handleInputChange}/>
+                        </Col>
+                    </Form.Group>:<Form.Group as={Row} controlId="details">
                         <Form.Label column sm="2">
                         Details
                         </Form.Label>
                         <Col sm="10">
-                        <Form.Control name="description" type="url" placeholder="Brief description"  onChange={this.handleInputChange}/>
+                            <Form.Control name="description" type="url" placeholder="Brief description"  onChange={this.handleInputChange}/>
                         </Col>
                     </Form.Group>
           
@@ -93,7 +95,7 @@ class ModalInput extends Component{
         // <form onSubmit={this.handleSubmit}>
         <InputGroup className="mb-3">
         <InputGroup.Prepend>
-        <InputGroup.Checkbox aria-label="Checkbox for following text input" checked={this.state.currentItem.checked} onChange={this.toggleCheckBox} />
+            <InputGroup.Checkbox aria-label="Checkbox for following text input" checked={this.state.currentItem.checked} onChange={this.toggleCheckBox} />
         </InputGroup.Prepend>
             <FormControl aria-label="Text input with checkbox" value={this.state.currentItem.itemText} onChange={this.handleChange}/>
             <Button variant="warning" type="submit" onClick={this.handleSubmit}>+</Button>
@@ -107,7 +109,7 @@ class ModalInput extends Component{
         const renderListItem = 
             <InputGroup className="mb-3" key={index}>
             <InputGroup.Prepend>
-            <InputGroup.Checkbox aria-label="Checkbox for following text input" checked={item.checked} onChange={()=>console.log("checkbox clicked")}/>
+                <InputGroup.Checkbox aria-label="Checkbox for following text input" checked={item.checked} onChange={()=>console.log("checkbox clicked")}/>
             </InputGroup.Prepend>
                 <FormControl aria-label="Text input with checkbox" value={item.text}/>
             </InputGroup>  
