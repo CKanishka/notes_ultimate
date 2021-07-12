@@ -10,26 +10,11 @@ class App extends React.Component {
     users: [{ email: "test@mail.com", password: "test123" }],
     currentUser: "",
   };
-  handleSignIn = (email, password) => {
-    // const exists = this.state.users.map((user) => {
-    //     if(user.email === email && user.password === password){
-    //         return true
-    //     }
-    //     return false
-    // })
-
-    // if(exists.some((item)=> item === true)){
-    //     this.setState({route:"home"})
-    // }
-
-    // else{
-    //     alert("Please check your credentials or register")
-    // }
-
+  handleSignIn = (form) => {
     fetch("http://localhost:5000/authenticate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(form),
     })
       .then((response) => response.json())
       .then((res) => {
@@ -48,13 +33,13 @@ class App extends React.Component {
   routeToLogin = () => {
     this.setState({ route: "signin" });
   };
-  handleRegister = (email, password) => {
+  handleRegister = (form) => {
     // this.setState({users:[...this.state.users,{email,password}]},this.routeToLogin)
     // alert("Registered Successfully. You can signin now.")
     fetch(" http://localhost:5000/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(form),
     })
       .then((res) => {
         console.log(res);
@@ -73,7 +58,7 @@ class App extends React.Component {
     return (
       <div className="App">
         {this.state.route === "home" ? (
-          <AppContainer1 currentUser={this.state.currentUser} />
+          <AppContainer currentUser={this.state.currentUser} />
         ) : this.state.route === "signin" ? (
           <LoginForm
             handleSignIn={this.handleSignIn}
