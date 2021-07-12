@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Header from "./Header";
 import ButtonToolbar from "./ButtonToolbar";
 import ModalInput from "./ModalInput";
-import Card from "./CardComponent";
+import NoteItemCard from "./NoteItemCard";
 import { Container, Row, CardColumns } from "react-bootstrap";
 
 class AppContainer extends Component {
@@ -112,7 +112,7 @@ class AppContainer extends Component {
             <CardColumns>
               {this.state.searchQuery.length > 0
                 ? this.state.filteredItems.map((item) => (
-                    <Card
+                    <NoteItemCard
                       key={item._id}
                       item={item}
                       toggleCompletion={this.toggleCompletion}
@@ -120,7 +120,7 @@ class AppContainer extends Component {
                     />
                   ))
                 : this.state.cardItems.map((item) => (
-                    <Card
+                    <NoteItemCard
                       key={item._id}
                       item={item}
                       toggleCompletion={this.toggleCompletion}
