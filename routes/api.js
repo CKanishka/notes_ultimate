@@ -18,7 +18,7 @@ router.post("/register", function (req, res) {
           : "please try again";
       res.status(500).json({ error: `Error registering new user, ${errMsg}` });
     } else {
-      res.status(200).json(user);
+      res.status(200).json({ user: user._id });
     }
   });
 });

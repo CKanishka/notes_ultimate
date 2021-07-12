@@ -18,7 +18,6 @@ class App extends React.Component {
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log(res);
         if (!res.error) this.setState({ route: "home", currentUser: res.user });
         else alert("Please check your credentials or register");
       })
@@ -41,16 +40,15 @@ class App extends React.Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     })
+      .then((response) => response.json())
       .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          alert("Registered Successfully. You can signin now.");
-          this.setState({ route: "signin" });
-        } else
-          alert("Error registering please try again with different email-id");
+        if (!res.error) {
+          this.setState({ route: "home", currentUser: res.user });
+          alert("Registered Successfully");
+        } else alert("Please check your credentials or register");
       })
       .catch((err) => {
-        alert("Error logging in");
+        alert("Error registering");
       });
   };
 
