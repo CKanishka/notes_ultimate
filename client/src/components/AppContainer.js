@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "./Header";
-import ButtonContainer from "./ButtonContainer";
+import ButtonToolbar from "./ButtonToolbar";
 import ModalInput from "./ModalInput";
 import Card from "./CardComponent";
 import { Container, Row, CardColumns } from "react-bootstrap";
@@ -106,7 +106,7 @@ class AppContainer extends Component {
           addCardWithImage={this.addCardWithImage}
         />
         <Header handleSearch={this.handleSearch} />
-        <ButtonContainer triggerModal={this.triggerModal} />
+        <ButtonToolbar triggerModal={this.triggerModal} />
         <Container className="flex-grow-1">
           <Row>
             <CardColumns>
