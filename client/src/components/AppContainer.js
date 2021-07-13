@@ -17,7 +17,7 @@ class AppContainer extends Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    fetch(`http://localhost:5000/getitems/${this.props.currentUser}`, {
+    fetch(`/getitems/${this.props.currentUser}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
@@ -33,7 +33,7 @@ class AppContainer extends Component {
 
   addItem = (item) => {
     //saving the new item to DB
-    fetch("http://localhost:5000/additem", {
+    fetch("/additem", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...item, userid: this.props.currentUser }),
@@ -54,7 +54,7 @@ class AppContainer extends Component {
       );
     };
     //saving the updated item to DB
-    fetch(`http://localhost:5000/update/${item._id}`, {
+    fetch(`/update/${item._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
@@ -76,7 +76,7 @@ class AppContainer extends Component {
     formData.append("userid", this.props.currentUser);
     formData.append("location", null);
 
-    fetch("http://localhost:5000/uploadimage", {
+    fetch("/uploadimage", {
       method: "POST",
       body: formData,
     })
@@ -85,7 +85,7 @@ class AppContainer extends Component {
   };
 
   deleteItem = (id) => {
-    fetch(`http://localhost:5000/delete/${id}`, {
+    fetch(`/delete/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
