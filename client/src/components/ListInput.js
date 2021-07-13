@@ -24,6 +24,10 @@ const ListInput = ({ listItems, addListItem }) => {
       setCurrItem({ text: "", checked: false, id: uuid() });
     }
   };
+
+  const checkboxDisabled = () => {
+    return;
+  };
   return (
     <>
       <Form.Group controlId="list">
@@ -33,7 +37,10 @@ const ListInput = ({ listItems, addListItem }) => {
             No items in list
           </Badge>
         ) : (
-          <CheckboxItemList listItems={listItems} onChecked={toggleCheckBox} />
+          <CheckboxItemList
+            listItems={listItems}
+            onChecked={checkboxDisabled}
+          />
         )}
         <InputGroup>
           <InputGroup.Prepend>

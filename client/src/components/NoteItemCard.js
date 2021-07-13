@@ -5,8 +5,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import CheckboxItemList from "./CheckboxItemList";
 
-const NoteItemCard = ({ item, toggleCompletion, handleDelete }) => {
-  const { title, description, link, file, listItems, location } = item;
+const NoteItemCard = ({ item, toggleCheckbox, handleDelete, handleSave }) => {
+  const {
+    title,
+    description,
+    link,
+    file,
+    listItems,
+    location,
+    __unsavedChanges,
+  } = item;
 
   return (
     <Card className="note-item-card" style={{ width: "18rem" }}>
@@ -21,23 +29,27 @@ const NoteItemCard = ({ item, toggleCompletion, handleDelete }) => {
         {description && <Card.Text>{description}</Card.Text>}
         {link && <a href={link}> {link} </a>}
         {listItems && (
-          <CheckboxItemList
-            listItems={listItems}
-            onChecked={toggleCompletion}
-          />
+          <CheckboxItemList listItems={listItems} onChecked={toggleCheckbox} />
         )}
         {location && (
           <MapContainer location={location} dragMarkerDisable={true} />
         )}
         <hr />
-        <Button
-          variant="outline-danger"
-          size="sm"
-          onClick={handleDelete}
-          className="d-table ml-auto"
-        >
-          <FontAwesomeIcon icon={faTrash} />
-        </Button>
+        <span className="d-table ml-auto">
+          {__unsavedChanges && (
+            <Button
+              variant="outline-warning"
+              size="sm"
+              onClick={handleSave}
+              className="mr-2"
+            >
+              Save Changes
+            </Button>
+          )}
+          <Button variant="outline-danger" size="sm" onClick={handleDelete}>
+            <FontAwesomeIcon icon={faTrash} />
+          </Button>
+        </span>
       </Card.Body>
     </Card>
   );

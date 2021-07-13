@@ -85,6 +85,30 @@ router.delete("/delete/:id", (req, res) => {
     .catch(() => res.status(404).json({ sucess: false }));
 });
 
+/***********************UPDATE EXISTING ITEM*************************/
+
+router.put("/update/:id", (req, res) => {
+  const newItem = {
+    title: req.body.title,
+    description: req.body.description,
+    link: req.body.link,
+    file: req.body.file,
+    listItems: req.body.listItems,
+    location: req.body.location,
+    userid: req.body.userid,
+  };
+  Item.findById(req.params.id)
+    .then((item) =>
+      item.updateOne(newItem).then(() => {
+        res.json({ success: true });
+      })
+    )
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ success: false });
+    });
+});
+
 /***********Upload Image ************/
 const DIR = "./public/images/";
 

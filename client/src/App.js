@@ -24,13 +24,6 @@ class App extends React.Component {
         alert("Error logging in");
       });
   };
-
-  routeToRegister = () => {
-    this.setState({ route: "register" });
-  };
-  routeToLogin = () => {
-    this.setState({ route: "signin" });
-  };
   handleRegister = (form) => {
     fetch(" http://localhost:5000/register", {
       method: "POST",
@@ -42,11 +35,17 @@ class App extends React.Component {
         if (!res.error) {
           this.setState({ route: "home", currentUser: res.user });
           alert("Registered Successfully");
-        } else alert("Please check your credentials or register");
+        } else alert("Failed to register, please try again.");
       })
       .catch((err) => {
         alert("Error registering");
       });
+  };
+  routeToRegister = () => {
+    this.setState({ route: "register" });
+  };
+  routeToLogin = () => {
+    this.setState({ route: "signin" });
   };
 
   render() {

@@ -42,6 +42,33 @@ class AppContainer extends Component {
       .then((item) => this.updateItems(item));
   };
 
+  saveItem = (item) => {
+    const resetItemUnsavedState = () => {
+      this.setState(
+        (state) => ({
+          items: state.items.map((x) =>
+            x._id === item._id ? { ...x, __unsavedChanges: false } : x
+          ),
+        }),
+        this.filterItems
+      );
+    };
+    //saving the updated item to DB
+    fetch(`http://localhost:5000/update/${item._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          resetItemUnsavedState();
+          alert("Changes saved");
+        } else throw Error;
+      })
+      .catch((err) => alert("Failed to save changes"));
+  };
+
   addImage = (item) => {
     const formData = new FormData();
     formData.append("cardImg", item.fileObj);
@@ -70,8 +97,9 @@ class AppContainer extends Component {
             },
             this.filterItems
           );
-        }
-      });
+        } else throw Error;
+      })
+      .catch((err) => alert("Failed to delete item"));
   };
 
   filterItems = () => {
@@ -106,17 +134,20 @@ class AppContainer extends Component {
     this.setState({ showModal: !this.state.showModal, option: option });
   };
 
-  toggleCompletion = (id) => {
-    const updatedCards = this.state.items.map((item) => {
-      const updatedListItems = item.listItems.map((li) => {
-        if (li.id === id) {
-          return { ...li, checked: !li.checked };
-        }
-        return li;
-      });
-      return { ...item, listItems: updatedListItems };
+  handleToggleCheckbox = (itemId, id) => {
+    const updatedItems = this.state.items.map((item) => {
+      if (item._id === itemId) {
+        return {
+          ...item,
+          listItems: item.listItems.map((x) =>
+            x.id === id ? { ...x, checked: !x.checked } : x
+          ),
+          __unsavedChanges: true,
+        };
+      }
+      return item;
     });
-    this.setState({ items: updatedCards });
+    this.setState({ items: updatedItems }, this.filterItems);
   };
 
   render() {
@@ -149,8 +180,11 @@ class AppContainer extends Component {
                   <NoteItemCard
                     key={item._id}
                     item={item}
-                    toggleCompletion={this.toggleCompletion}
+                    toggleCheckbox={(id) =>
+                      this.handleToggleCheckbox(item._id, id)
+                    }
                     handleDelete={() => this.deleteItem(item._id)}
+                    handleSave={() => this.saveItem(item)}
                   />
                 ))}
               </CardColumns>
