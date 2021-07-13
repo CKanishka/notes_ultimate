@@ -20,6 +20,8 @@ app.use(cors());
 //applying middleware bodyparser
 app.use(bodyParser.json());
 
+app.use(express.static(__dirname + "/public"));
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
