@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 class App extends React.Component {
   state = {
     route: "signin",
-    users: [{ email: "test@mail.com", password: "test123" }],
     currentUser: "",
   };
   handleSignIn = (form) => {
@@ -33,8 +32,6 @@ class App extends React.Component {
     this.setState({ route: "signin" });
   };
   handleRegister = (form) => {
-    // this.setState({users:[...this.state.users,{email,password}]},this.routeToLogin)
-    // alert("Registered Successfully. You can signin now.")
     fetch(" http://localhost:5000/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -3,24 +3,34 @@ import Header from "./Header";
 import ButtonToolbar from "./ButtonToolbar";
 import ModalInput from "./InputModal";
 import NoteItemCard from "./NoteItemCard";
-import { Container, Row, CardColumns } from "react-bootstrap";
+import { Container, Row, CardColumns, Alert, Spinner } from "react-bootstrap";
 
 class AppContainer extends Component {
   state = {
     showModal: false,
-    cardItems: [],
+    items: [],
     filteredItems: [],
     option: "",
     searchQuery: "",
+    loading: false,
   };
+
   componentDidMount() {
+    this.setState({ loading: true });
     fetch(`http://localhost:5000/getitems/${this.props.currentUser}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => res.json())
-      .then((res) => this.setState({ cardItems: res }));
+      .then((res) =>
+        this.setState({ items: res, loading: false }, this.filterItems)
+      )
+      .catch((err) => {
+        alert("Failed to fetch items");
+        this.setState({ loading: false });
+      });
   }
+
   addItem = (item) => {
     //saving the new item to DB
     fetch("http://localhost:5000/additem", {
@@ -29,37 +39,65 @@ class AppContainer extends Component {
       body: JSON.stringify({ ...item, userid: this.props.currentUser }),
     })
       .then((res) => res.json())
-      .then((item) =>
-        this.setState({ cardItems: [item, ...this.state.cardItems] }, () =>
-          console.log(this.state.cardItems)
-        )
-      );
+      .then((item) => this.updateItems(item));
   };
+
   addImage = (item) => {
     const formData = new FormData();
     formData.append("cardImg", item.fileObj);
     formData.append("title", item.title);
     formData.append("userid", this.props.currentUser);
     formData.append("location", null);
+
     fetch("http://localhost:5000/uploadimage", {
       method: "POST",
       body: formData,
     })
       .then((res) => res.json())
-      .then((item) =>
-        this.setState({ cardItems: [item, ...this.state.cardItems] })
-      );
+      .then((item) => this.updateItems(item));
   };
-  handleSearch = (searchQuery) => {
-    console.log(searchQuery);
-    const filteredItems = this.state.cardItems.filter(
+
+  deleteItem = (id) => {
+    fetch(`http://localhost:5000/delete/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          this.setState(
+            {
+              items: this.state.items.filter((item) => item._id !== id),
+            },
+            this.filterItems
+          );
+        }
+      });
+  };
+
+  filterItems = () => {
+    const { items, searchQuery } = this.state;
+    const filteredItems = items.filter(
       (item) =>
         !searchQuery ||
         (searchQuery && !searchQuery.trim()) ||
         item.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    this.setState({ filteredItems, searchQuery });
+    this.setState({ filteredItems });
   };
+
+  updateItems = (item) => {
+    this.setState(
+      (state) => ({
+        items: [item, ...state.items],
+      }),
+      this.filterItems
+    );
+  };
+
+  handleSearch = (searchQuery) => {
+    this.setState({ searchQuery }, this.filterItems);
+  };
+
   handleClose = () => {
     this.setState({ showModal: false });
   };
@@ -67,8 +105,9 @@ class AppContainer extends Component {
   triggerModal = (option) => {
     this.setState({ showModal: !this.state.showModal, option: option });
   };
+
   toggleCompletion = (id) => {
-    const updatedCards = this.state.cardItems.map((item) => {
+    const updatedCards = this.state.items.map((item) => {
       const updatedListItems = item.listItems.map((li) => {
         if (li.id === id) {
           return { ...li, checked: !li.checked };
@@ -77,23 +116,9 @@ class AppContainer extends Component {
       });
       return { ...item, listItems: updatedListItems };
     });
-    this.setState({ cardItems: updatedCards });
+    this.setState({ items: updatedCards });
   };
-  deleteItem = (id) => {
-    const updatedCards = this.state.cardItems.filter((item) => item._id !== id);
-    this.setState({ cardItems: updatedCards });
-  };
-  handleDelete = (id) => {
-    fetch(`http://localhost:5000/delete/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success) {
-          this.deleteItem(id);
-        }
-      });
-  };
+
   render() {
     return (
       <>
@@ -107,27 +132,30 @@ class AppContainer extends Component {
         <Header handleSearch={this.handleSearch} />
         <ButtonToolbar triggerModal={this.triggerModal} />
         <Container className="flex-grow-1">
-          <Row>
-            <CardColumns>
-              {this.state.searchQuery.length > 0
-                ? this.state.filteredItems.map((item) => (
-                    <NoteItemCard
-                      key={item._id}
-                      item={item}
-                      toggleCompletion={this.toggleCompletion}
-                      handleDelete={() => this.handleDelete(item._id)}
-                    />
-                  ))
-                : this.state.cardItems.map((item) => (
-                    <NoteItemCard
-                      key={item._id}
-                      item={item}
-                      toggleCompletion={this.toggleCompletion}
-                      handleDelete={() => this.handleDelete(item._id)}
-                    />
-                  ))}
-            </CardColumns>
-          </Row>
+          {this.state.loading ? (
+            <Spinner
+              animation="border"
+              variant="primary"
+              className="d-table mx-auto"
+            />
+          ) : !this.state.filteredItems.length ? (
+            <Alert variant="warning" className="d-table mx-auto">
+              No items found.
+            </Alert>
+          ) : (
+            <Row>
+              <CardColumns>
+                {this.state.filteredItems.map((item) => (
+                  <NoteItemCard
+                    key={item._id}
+                    item={item}
+                    toggleCompletion={this.toggleCompletion}
+                    handleDelete={() => this.deleteItem(item._id)}
+                  />
+                ))}
+              </CardColumns>
+            </Row>
+          )}
         </Container>
       </>
     );
