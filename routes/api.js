@@ -55,7 +55,7 @@ router.post("/authenticate", function (req, res) {
 
 /***********************ADD NEW ITEM*************************/
 
-router.post("/additem", (req, res) => {
+router.post("/", (req, res) => {
   const newItem = new Item({
     title: req.body.title,
     description: req.body.description,
@@ -70,14 +70,14 @@ router.post("/additem", (req, res) => {
 
 /************************GET ITEMS BY EACH USER  **************/
 
-router.get("/getitems/:userid", (req, res) => {
+router.get("/:userid", (req, res) => {
   Item.find({ userid: req.params.userid })
     .then((items) => res.json(items))
     .catch(() => res.status(404).json({ sucess: false }));
 });
 
 /***********DELETE ITEM ***************/
-router.delete("/delete/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   Item.findById(req.params.id)
     .then((item) =>
       item.remove().then(() => res.status(200).json({ success: true }))
@@ -87,7 +87,7 @@ router.delete("/delete/:id", (req, res) => {
 
 /***********************UPDATE EXISTING ITEM*************************/
 
-router.put("/update/:id", (req, res) => {
+router.put("/:id", (req, res) => {
   const newItem = {
     title: req.body.title,
     description: req.body.description,
@@ -138,7 +138,7 @@ const upload = multer({
   },
 });
 
-router.post("/uploadimage", upload.single("cardImg"), (req, res, next) => {
+router.post("/image", upload.single("cardImg"), (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
   const item = new Item({
     title: req.body.title,

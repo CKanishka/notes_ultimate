@@ -20,10 +20,12 @@ app.use(cors());
 //applying middleware bodyparser
 app.use(bodyParser.json());
 
-app.use(express.static(__dirname + "/public"));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
 //using route
-app.use("/", items);
+app.use("/api", items);
 
 const port = process.env.PORT || 5000;
 

@@ -10,7 +10,7 @@ class App extends React.Component {
     currentUser: "",
   };
   handleSignIn = (form) => {
-    fetch("/authenticate", {
+    fetch("/api/authenticate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -25,7 +25,7 @@ class App extends React.Component {
       });
   };
   handleRegister = (form) => {
-    fetch(" /register", {
+    fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
