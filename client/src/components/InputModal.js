@@ -41,25 +41,25 @@ class InputModal extends Component {
     this.setState({ location: { lat, lng } });
   };
 
+  reset = () => {
+    this.setState(() => defaultState);
+    this.props.handleClose();
+  };
   handleSubmit = (e) => {
     e.preventDefault();
-    const reset = () => {
-      this.setState(() => defaultState);
-      this.props.handleClose();
-    };
     const { title, fileObj } = this.state;
 
     if (fileObj) {
       this.props.addImage({ title, fileObj });
-      reset();
+      this.reset();
     } else {
       this.props.addItem(this.state);
-      reset();
+      this.reset();
     }
   };
 
   render() {
-    const { show, handleClose, option } = this.props;
+    const { show, option } = this.props;
     const formInput =
       option === NOTE_TYPE.Details ? (
         <DetailsInput handleInputChange={this.handleInputChange} />
@@ -84,7 +84,7 @@ class InputModal extends Component {
         <LinkInput handleInputChange={this.handleInputChange} />
       );
     return (
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={this.reset}>
         <Modal.Body>
           <Form>
             <Form.Group as={Row} controlId="title">
