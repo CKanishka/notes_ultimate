@@ -25,6 +25,16 @@
 .note-item-card .card-img {
   max-height: 300px;
 }
+
+.input-img {
+  padding: 0.25rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  height: 300px;
+  width: 300px;
+}
+
 ul {
   list-style-type: none;
   margin: 1rem;

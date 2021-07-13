@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "./Header";
 import ButtonToolbar from "./ButtonToolbar";
-import ModalInput from "./ModalInput";
+import ModalInput from "./InputModal";
 import NoteItemCard from "./NoteItemCard";
 import { Container, Row, CardColumns } from "react-bootstrap";
 
@@ -21,8 +21,7 @@ class AppContainer extends Component {
       .then((res) => res.json())
       .then((res) => this.setState({ cardItems: res }));
   }
-  addCardItems = (item) => {
-    // this.setState({cardItems:[item,...this.state.cardItems]},()=>console.log(this.state.cardItems))
+  addItem = (item) => {
     //saving the new item to DB
     fetch("http://localhost:5000/additem", {
       method: "POST",
@@ -36,7 +35,7 @@ class AppContainer extends Component {
         )
       );
   };
-  addCardWithImage = (item) => {
+  addImage = (item) => {
     const formData = new FormData();
     formData.append("cardImg", item.fileObj);
     formData.append("title", item.title);
@@ -102,8 +101,8 @@ class AppContainer extends Component {
           show={this.state.showModal}
           handleClose={this.handleClose}
           option={this.state.option}
-          addCardItems={this.addCardItems}
-          addCardWithImage={this.addCardWithImage}
+          addItem={this.addItem}
+          addImage={this.addImage}
         />
         <Header handleSearch={this.handleSearch} />
         <ButtonToolbar triggerModal={this.triggerModal} />
