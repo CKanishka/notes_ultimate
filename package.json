@@ -1,24 +1,29 @@
 {
   "name": "notesapp",
   "version": "1.0.0",
-  "description": "**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**",
+  "description": "An all in one app to manage your notes",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://KanishkaC@bitbucket.org/KanishkaC/notesapp.git"
+    "url": "git@github.com:CKanishka/notes_ultimate.git"
   },
   "author": "kanishka",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/KanishkaC/notesapp#readme",
+  "homepage": "https://notesultimate.herokuapp.com",
   "dependencies": {
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^4.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^5.9.5",
     "multer": "^1.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }
