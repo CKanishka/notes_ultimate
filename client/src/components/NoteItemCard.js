@@ -3,6 +3,7 @@ import { Card, Button } from "react-bootstrap";
 import MapContainer from "./MapContainer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import CheckboxItemList from "./CheckboxItemList";
 
 const NoteItemCard = ({ item, toggleCompletion, handleDelete }) => {
   const { title, description, link, file, listItems, location } = item;
@@ -20,24 +21,10 @@ const NoteItemCard = ({ item, toggleCompletion, handleDelete }) => {
         {description && <Card.Text>{description}</Card.Text>}
         {link && <a href={link}> {link} </a>}
         {listItems && (
-          <ul>
-            {listItems.map((item) => (
-              <li
-                key={item.id}
-                onClick={() => toggleCompletion(item.id)}
-                className={`custom-control custom-checkbox text-muted ${
-                  item.checked ? "checked" : ""
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={item.checked}
-                  className="custom-control-input"
-                />
-                <label className="custom-control-label">{item.text}</label>
-              </li>
-            ))}
-          </ul>
+          <CheckboxItemList
+            listItems={listItems}
+            onChecked={toggleCompletion}
+          />
         )}
         {location && (
           <MapContainer location={location} dragMarkerDisable={true} />
