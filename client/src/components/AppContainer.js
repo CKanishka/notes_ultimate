@@ -3,7 +3,7 @@ import Header from "./Header";
 import ButtonToolbar from "./ButtonToolbar";
 import ModalInput from "./InputModal";
 import NoteItemCard from "./NoteItemCard";
-import { Container, Row, CardColumns, Alert, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Alert, Spinner } from "react-bootstrap";
 
 class AppContainer extends Component {
   state = {
@@ -174,9 +174,9 @@ class AppContainer extends Component {
               No items found.
             </Alert>
           ) : (
-            <Row>
-              <CardColumns>
-                {this.state.filteredItems.map((item) => (
+            <Row sm={2} md={3}>
+              {this.state.filteredItems.map((item) => (
+                <Col className="mb-1">
                   <NoteItemCard
                     key={item._id}
                     item={item}
@@ -186,8 +186,8 @@ class AppContainer extends Component {
                     handleDelete={() => this.deleteItem(item._id)}
                     handleSave={() => this.saveItem(item)}
                   />
-                ))}
-              </CardColumns>
+                </Col>
+              ))}
             </Row>
           )}
         </Container>
